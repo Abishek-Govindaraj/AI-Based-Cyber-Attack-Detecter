@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}Model Info - CyberGuard AI{% endblock %}
+{% block content %}
+
+<h1>ℹ️ Model Information</h1>
+
+<div class="info-box">
+    <h2>🤖 AI Model</h2>
+    <p><strong>Algorithm:</strong> Random Forest Classifier</p>
+    <p><strong>Library:</strong> Scikit-learn</p>
+    <p><strong>Why Random Forest:</strong> High accuracy, fast training, resistant to overfitting, and works well with mixed categorical/numerical network traffic features.</p>
+</div>
+
+<div class="info-box">
+    <h2>📊 Dataset</h2>
+    <p><strong>Name:</strong> NSL-KDD Dataset</p>
+    <p><strong>Training records:</strong> 125,973</p>
+    <p><strong>Test records:</strong> 22,544</p>
+    <p><strong>Features per record:</strong> 41 network traffic attributes</p>
+    <p><strong>Classes:</strong> Normal, DoS, Probe, R2L, U2R</p>
+</div>
+
+<div class="info-box">
+    <h2>🎯 Model Performance</h2>
+    <p><strong>Overall Accuracy:</strong> 99.9%</p>
+    <p><strong>DoS Detection:</strong> Precision 1.00, Recall 1.00</p>
+    <p><strong>Normal Traffic Detection:</strong> Precision 1.00, Recall 1.00</p>
+    <p><strong>Probe Detection:</strong> Precision 1.00, Recall 0.99</p>
+    <p><strong>R2L Detection:</strong> Precision 1.00, Recall 0.97</p>
+    <p><strong>U2R Detection:</strong> Precision 0.89, Recall 0.80 (lower due to limited training samples — only 52 examples)</p>
+</div>
+
+<div class="info-box">
+    <h2>⚙️ How It Works</h2>
+    <p>1. Network traffic log (CSV) is uploaded through the Threat Detection page</p>
+    <p>2. Data is cleaned and encoded using the same preprocessing pipeline used during training</p>
+    <p>3. The trained Random Forest model analyzes each traffic record</p>
+    <p>4. Each record is classified as Normal or one of four attack types, with a confidence score</p>
+    <p>5. Results are stored and visualized on the Dashboard and Attack Analysis pages</p>
+</div>
+
+<div class="info-box">
+    <h2>🛠️ Technology Stack</h2>
+    <p><strong>Backend:</strong> Python, Flask</p>
+    <p><strong>AI/ML:</strong> Scikit-learn (Random Forest)</p>
+    <p><strong>Database:</strong> SQLite</p>
+    <p><strong>Visualization:</strong> Chart.js</p>
+    <p><strong>Frontend:</strong> HTML, CSS, JavaScript</p>
+</div>
+
+{% endblock %}

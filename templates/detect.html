@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+{% block title %}Threat Detection - CyberGuard AI{% endblock %}
+{% block content %}
+
+<h1>🚨 Threat Detection</h1>
+
+<div class="upload-box">
+    <h2>Upload Network Traffic Log (CSV)</h2>
+    <form action="/detect" method="POST" enctype="multipart/form-data">
+        <input type="file" name="file" accept=".csv,.txt,.xlsx,.xls" required>
+        <button type="submit">Analyze Traffic</button>
+    </form>
+    {% if filename %}
+    <p style="margin-top:15px; color:#9aa5b8;">📄 Last analyzed file: <strong style="color:#ffffff;">{{ filename }}</strong></p>
+    {% endif %}
+</div>
+{% if results %}
+
+<div class="stats-row">
+    <div class="stat-card info">
+        <div class="stat-label">Total Packets</div>
+        <div class="stat-value">{{ total }}</div>
+    </div>
+    <div class="stat-card safe">
+        <div class="stat-label">Safe Traffic</div>
+        <div class="stat-value">{{ safe }}</div>
+    </div>
+    <div class="stat-card critical">
+        <div class="stat-label">Malicious Traffic</div>
+        <div class="stat-value">{{ malicious }}</div>
+    </div>
+</div>
+
+<div class="upload-box">
+    <h2>Prediction Results</h2>
+    <table>
+        <tr>
+            <th>Row</th>
+            <th>Prediction</th>
+            <th>Confidence</th>
+        </tr>
+        {% for r in results %}
+        <tr class="{{ 'attack-row' if r.prediction != 'Normal' else 'normal-row' }}">
+            <td>{{ r.row }}</td>
+            <td>{{ r.prediction }}</td>
+            <td>{{ r.confidence }}%</td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+
+<div class="charts">
+    <div class="chart-box">
+        <h2>Traffic Overview</h2>
+        <canvas id="pieChart"></canvas>
+    </div>
+    <div class="chart-box">
+        <h2>Attack Type Breakdown</h2>
+        <canvas id="barChart"></canvas>
+    </div>
+</div>
+
+<script>
+    new Chart(document.getElementById('pieChart'), {
+        type: 'pie',
+        data: {
+            labels: ['Safe Traffic', 'Malicious Traffic'],
+            datasets: [{
+                data: [{{ safe }}, {{ malicious }}],
+                backgroundColor: ['#2ecc71', '#e74c3c']
+            }]
+        }
+    });
+
+    new Chart(document.getElementById('barChart'), {
+        type: 'bar',
+        data: {
+            labels: {{ attack_labels | tojson }},
+            datasets: [{
+                label: 'Count',
+                data: {{ attack_values | tojson }},
+                backgroundColor: ['#2ecc71', '#e74c3c', '#f39c12', '#9b59b6', '#3498db']
+            }]
+        },
+        options: {
+            scales: { y: { beginAtZero: true } }
+        }
+    });
+</script>
+
+{% endif %}
+
+{% endblock %}

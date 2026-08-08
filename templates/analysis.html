@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+{% block title %}Attack Analysis - CyberGuard AI{% endblock %}
+{% block content %}
+
+<h1>📈 Attack Analysis</h1>
+
+<div class="stats-row">
+    <div class="stat-card critical">
+        <div class="stat-label">DoS Attacks</div>
+        <div class="stat-value">{{ stats.dos }}</div>
+    </div>
+    <div class="stat-card warning">
+        <div class="stat-label">Probe Attacks</div>
+        <div class="stat-value">{{ stats.probe }}</div>
+    </div>
+    <div class="stat-card" style="border-left-color:#9b59b6;">
+        <div class="stat-label">R2L Attacks</div>
+        <div class="stat-value">{{ stats.r2l }}</div>
+    </div>
+    <div class="stat-card info">
+        <div class="stat-label">U2R Attacks</div>
+        <div class="stat-value">{{ stats.u2r }}</div>
+    </div>
+</div>
+
+<div class="charts">
+    <div class="chart-box">
+        <h2>Attack Type Distribution</h2>
+        <canvas id="attackPie"></canvas>
+    </div>
+    <div class="chart-box">
+        <h2>Attack Counts</h2>
+        <canvas id="attackBar"></canvas>
+    </div>
+</div>
+
+<div class="upload-box" style="margin-top:30px;">
+    <h2>Attack Type Reference</h2>
+    <table>
+        <tr>
+            <th>Attack Type</th>
+            <th>Description</th>
+            <th>Total Detected</th>
+        </tr>
+        <tr>
+            <td>DoS</td>
+            <td>Denial of Service — floods target to make it unavailable</td>
+            <td>{{ stats.dos }}</td>
+        </tr>
+        <tr>
+            <td>Probe</td>
+            <td>Surveillance/scanning to gather info before an attack</td>
+            <td>{{ stats.probe }}</td>
+        </tr>
+        <tr>
+            <td>R2L</td>
+            <td>Remote-to-Local — unauthorized access from a remote machine</td>
+            <td>{{ stats.r2l }}</td>
+        </tr>
+        <tr>
+            <td>U2R</td>
+            <td>User-to-Root — unauthorized access to root/admin privileges</td>
+            <td>{{ stats.u2r }}</td>
+        </tr>
+    </table>
+</div>
+
+<script>
+    new Chart(document.getElementById('attackPie'), {
+        type: 'pie',
+        data: {
+            labels: ['DoS', 'Probe', 'R2L', 'U2R'],
+            datasets: [{
+                data: [{{ stats.dos }}, {{ stats.probe }}, {{ stats.r2l }}, {{ stats.u2r }}],
+                backgroundColor: ['#e74c3c', '#f39c12', '#9b59b6', '#3498db']
+            }]
+        }
+    });
+
+    new Chart(document.getElementById('attackBar'), {
+        type: 'bar',
+        data: {
+            labels: ['DoS', 'Probe', 'R2L', 'U2R'],
+            datasets: [{
+                label: 'Count',
+                data: [{{ stats.dos }}, {{ stats.probe }}, {{ stats.r2l }}, {{ stats.u2r }}],
+                backgroundColor: ['#e74c3c', '#f39c12', '#9b59b6', '#3498db']
+            }]
+        },
+        options: {
+            scales: { y: { beginAtZero: true } }
+        }
+    });
+</script>
+
+{% endblock %}

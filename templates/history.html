@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Scan History - CyberGuard AI{% endblock %}
+{% block content %}
+
+<h1>🗂️ Scan History</h1>
+
+<div class="upload-box">
+    <table>
+        <tr>
+            <th>Timestamp</th>
+            <th>File Name</th>
+            <th>Total Packets</th>
+            <th>Safe Traffic</th>
+            <th>Malicious Traffic</th>
+        </tr>
+        {% for s in all_scans %}
+        <tr>
+            <td>{{ s[0] }}</td>
+            <td>{{ s[1] }}</td>
+            <td>{{ s[2] }}</td>
+            <td style="color:#2ecc71;">{{ s[3] }}</td>
+            <td style="color:#ff6b6b;">{{ s[4] }}</td>
+        </tr>
+        {% else %}
+        <tr><td colspan="5">No scans yet. Go to Threat Detection to upload a file.</td></tr>
+        {% endfor %}
+    </table>
+</div>
+
+{% endblock %}

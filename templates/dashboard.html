@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+{% block title %}Dashboard - CyberGuard AI{% endblock %}
+{% block content %}
+
+<h1>📊 Security Dashboard</h1>
+
+<div class="stats-row">
+    <div class="stat-card info">
+        <div class="stat-label">Total Scans</div>
+        <div class="stat-value">{{ stats.scans_count }}</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-label">Total Packets Analyzed</div>
+        <div class="stat-value">{{ stats.total_packets }}</div>
+    </div>
+    <div class="stat-card safe">
+        <div class="stat-label">Safe Traffic</div>
+        <div class="stat-value">{{ stats.safe_pct }}%</div>
+    </div>
+    <div class="stat-card critical">
+        <div class="stat-label">Malicious Traffic</div>
+        <div class="stat-value">{{ stats.malicious_pct }}%</div>
+    </div>
+</div>
+
+<div class="charts">
+    <div class="chart-box">
+        <h2>Traffic Overview</h2>
+        <canvas id="trafficChart"></canvas>
+    </div>
+    <div class="chart-box">
+        <h2>Attack Types Detected</h2>
+        <canvas id="attackChart"></canvas>
+    </div>
+</div>
+
+<div class="upload-box" style="margin-top:30px;">
+    <h2>Recent Scans</h2>
+    <table>
+        <tr>
+            <th>Timestamp</th>
+            <th>Total Packets</th>
+            <th>Safe</th>
+            <th>Malicious</th>
+        </tr>
+        {% for r in recent %}
+        <tr>
+            <td>{{ r[0] }}</td>
+            <td>{{ r[1] }}</td>
+            <td>{{ r[2] }}</td>
+            <td>{{ r[3] }}</td>
+        </tr>
+        {% else %}
+        <tr><td colspan="4">No scans yet. Go to Threat Detection to upload a file.</td></tr>
+        {% endfor %}
+    </table>
+</div>
+
+<script>
+    new Chart(document.getElementById('trafficChart'), {
+        type: 'doughnut',
+        data: {
+            labels: ['Safe', 'Malicious'],
+            datasets: [{
+                data: [{{ stats.safe }}, {{ stats.malicious }}],
+                backgroundColor: ['#2ecc71', '#e74c3c']
+            }]
+        }
+    });
+
+    new Chart(document.getElementById('attackChart'), {
+        type: 'bar',
+        data: {
+            labels: ['DoS', 'Probe', 'R2L', 'U2R'],
+            datasets: [{
+                label: 'Count',
+                data: [{{ stats.dos }}, {{ stats.probe }}, {{ stats.r2l }}, {{ stats.u2r }}],
+                backgroundColor: ['#e74c3c', '#f39c12', '#9b59b6', '#3498db']
+            }]
+        },
+        options: {
+            scales: { y: { beginAtZero: true } }
+        }
+    });
+</script>
+
+{% endblock %}
