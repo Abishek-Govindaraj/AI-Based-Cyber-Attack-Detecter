@@ -2,6 +2,8 @@ from flask import Flask, render_template, request
 import pandas as pd
 import joblib
 import os
+from chatbot import get_chatbot_response
+from flask import jsonify
 from database import init_db, save_scan, get_dashboard_stats, get_recent_scans, get_all_scans
 
 app = Flask(__name__)
@@ -147,6 +149,14 @@ def about():
 def history():
     all_scans = get_all_scans()
     return render_template("history.html", all_scans=all_scans, active="history")
+
+@app.route("/chatbot", methods=["GET", "POST"])
+def chatbot():
+    if request.method == "POST":
+        user_message = request.json.get("message", "")
+        bot_reply = get_chatbot_response(user_message)
+        return {"reply": bot_reply}
+    return render_template("chatbot.html", active="chatbot")
 
 if __name__ == "__main__":
     app.run(debug=True)

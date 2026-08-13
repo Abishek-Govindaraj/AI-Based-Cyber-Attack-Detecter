@@ -6,3 +6,4 @@ uploads/*.csv
 uploads/*.txt
 *.db
 .vscode/
+.env

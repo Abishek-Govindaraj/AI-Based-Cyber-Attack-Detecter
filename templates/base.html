@@ -11,13 +11,16 @@
 
         <!-- Sidebar -->
         <aside class="sidebar">
-            <div class="brand">🛡️ NetGuardian</div>
+            <div class="brand">🛡️ NetGuardian
+                
+            </div>
             <nav>
                 <a href="/" class="{{ 'active' if active == 'dashboard' else '' }}">📊 Dashboard</a>
                 <a href="/detect" class="{{ 'active' if active == 'detect' else '' }}">🚨 Threat Detection</a>
                 <a href="/analysis" class="{{ 'active' if active == 'analysis' else '' }}">📈 Attack Analysis</a>
                 <a href="/history" class="{{ 'active' if active == 'history' else '' }}">🗂️ Scan History</a>
                 <a href="/about" class="{{ 'active' if active == 'about' else '' }}">ℹ️ Model Info</a>
+                <a href="/chatbot" class="{{ 'active' if active == 'chatbot' else '' }}">🤖 AI Assistant</a>
             </nav>
         </aside>
 

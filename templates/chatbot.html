@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block title %}AI Assistant - CyberGuard AI{% endblock %}
+{% block content %}
+
+<h1>🤖 CyberGuard AI Assistant</h1>
+
+<div class="upload-box" style="max-width: 700px;">
+    <div id="chatWindow" style="height: 400px; overflow-y: auto; border: 1px solid #2a3a5c; border-radius: 8px; padding: 15px; margin-bottom: 15px; background: #0f1729;">
+        <div style="color: #8b9bc4; margin-bottom: 10px;">
+            <strong>Assistant:</strong> Hello! Ask me about attack types (DoS, Probe, R2L, U2R), the AI model, or how to use this app.
+        </div>
+    </div>
+    <div style="display: flex; gap: 10px;">
+        <input type="text" id="chatInput" placeholder="Ask a question..." style="flex: 1; padding: 10px; border-radius: 6px; border: 1px solid #2a3a5c; background: #1a2540; color: white;">
+        <button onclick="sendMessage()" style="padding: 10px 20px; background: #DB3543; color: white; border: none; border-radius: 6px; cursor: pointer;">Send</button>
+    </div>
+</div>
+
+<script>
+function appendMessage(sender, text) {
+    const chatWindow = document.getElementById('chatWindow');
+    const div = document.createElement('div');
+    div.style.marginBottom = '10px';
+    div.style.color = sender === 'You' ? '#ffffff' : '#8b9bc4';
+    div.innerHTML = `<strong>${sender}:</strong> ${text.replace(/\n/g, '<br>')}`;
+    chatWindow.appendChild(div);
+    chatWindow.scrollTop = chatWindow.scrollHeight;
+}
+
+function sendMessage() {
+    const input = document.getElementById('chatInput');
+    const message = input.value.trim();
+    if (!message) return;
+
+    appendMessage('You', message);
+    input.value = '';
+
+    fetch('/chatbot', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: message })
+    })
+    .then(res => res.json())
+    .then(data => appendMessage('Assistant', data.reply));
+}
+
+document.getElementById('chatInput').addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') sendMessage();
+});
+</script>
+
+{% endblock %}
